@@ -38,7 +38,10 @@ class AccountsScreenState extends State<AccountsScreen> {
           ? ListView.builder(
               itemCount: accountList.length,
               itemBuilder: (context, index) {
-                return AccountListItem(account: accountList[index]);
+                return AccountListItem(
+                  account: accountList[index],
+                  onDelete: fetchAccountList,
+                );
               },
             )
           : const Center(
