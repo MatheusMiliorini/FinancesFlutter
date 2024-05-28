@@ -35,4 +35,14 @@ class AccountDB extends DatabaseHelper {
       whereArgs: [account.id],
     );
   }
+
+  Future<int> update(Account account) async {
+    final db = await database;
+    return await db.update(
+      tableName,
+      account.toMap(),
+      where: 'id = ?',
+      whereArgs: [account.id],
+    );
+  }
 }

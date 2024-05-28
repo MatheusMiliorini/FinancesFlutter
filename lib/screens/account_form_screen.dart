@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:finances/database/account_db.dart';
 import 'package:finances/models/account.dart';
 import 'package:finances/widgets/currency_input.dart';
@@ -102,13 +104,20 @@ class _AccountFormState extends State<AccountForm> {
             child: ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  Account account = Account(null, _accountNameController.text,
-                      _balance, _balance, _currencyController.text);
-                  account.id = await AccountDB().create(account);
-                  if (account.id != null) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
+                  if (widget.editAccount == null) {
+                    Account account = Account(null, _accountNameController.text,
+                        _balance, _balance, _currencyController.text);
+                    account.id = await AccountDB().create(account);
+                    if (account.id != null) {
+                      Navigator.pop(context);
+                    }
+                    return;
                   }
+                  final editAccount = widget.editAccount;
+                  editAccount!.name = _accountNameController.text;
+                  editAccount.currency = _currencyController.text;
+                  await AccountDB().update(editAccount);
+                  Navigator.pop(context);
                 }
               },
               child: const Text('Submit'),
