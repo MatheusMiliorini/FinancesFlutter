@@ -1,7 +1,7 @@
 import 'package:finances/database/account_db.dart';
 import 'package:finances/models/account.dart';
+import 'package:finances/widgets/currency_input.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class AccountFormScreen extends StatelessWidget {
   const AccountFormScreen({super.key});
@@ -23,24 +23,22 @@ class AccountForm extends StatefulWidget {
   const AccountForm({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return AccountFormState();
-  }
+  // ignore: library_private_types_in_public_api
+  _AccountFormState createState() => _AccountFormState();
 }
 
-class AccountFormState extends State<AccountForm> {
-  final formKey = GlobalKey<FormState>();
+class _AccountFormState extends State<AccountForm> {
+  final _formKey = GlobalKey<FormState>();
 
   // Form Controllers
-  final accountNameController = TextEditingController();
-  final balanceController = TextEditingController();
-  final currencyController = TextEditingController(text: 'EUR');
+  final _accountNameController = TextEditingController();
+  int _balance = 0;
+  final _currencyController = TextEditingController(text: 'EUR');
 
   @override
   void dispose() {
-    accountNameController.dispose();
-    balanceController.dispose();
-    currencyController.dispose();
+    _accountNameController.dispose();
+    _currencyController.dispose();
 
     super.dispose();
   }
@@ -48,11 +46,11 @@ class AccountFormState extends State<AccountForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
+      key: _formKey,
       child: Column(
         children: [
           TextFormField(
-            controller: accountNameController,
+            controller: _accountNameController,
             decoration: const InputDecoration(
               labelText: 'Account Name',
             ),
@@ -63,24 +61,14 @@ class AccountFormState extends State<AccountForm> {
               return null;
             },
           ),
-          TextFormField(
-            controller: balanceController,
-            decoration: const InputDecoration(
-              labelText: 'Current Balance',
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the current balance';
-              }
-              return null;
-            },
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
+          CurrencyInputField(
+            onChange: (value) => setState(() {
+              _balance = int.parse(value.replaceAll('.', ''));
+            }),
+            label: 'Current Balance',
           ),
           TextFormField(
-            controller: currencyController,
+            controller: _currencyController,
             decoration: const InputDecoration(
               labelText: 'Currency',
             ),
@@ -95,14 +83,10 @@ class AccountFormState extends State<AccountForm> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: ElevatedButton(
               onPressed: () async {
-                if (formKey.currentState!.validate()) {
-                  Account account = Account(
-                      null,
-                      accountNameController.text,
-                      int.parse(balanceController.text),
-                      int.parse(balanceController.text),
-                      currencyController.text);
-                  AccountDB().create(account);
+                if (_formKey.currentState!.validate()) {
+                  Account account = Account(null, _accountNameController.text,
+                      _balance, _balance, _currencyController.text);
+                  await AccountDB().create(account);
                 }
               },
               child: const Text('Submit'),
