@@ -9,7 +9,17 @@ class AccountDB extends DatabaseHelper {
     return await db.insert(tableName, account.toMap());
   }
 
-  // Future<void> list() async {
-  //   final db = await database;
-  // }
+  Future<List<Account>> list() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(tableName);
+    return List.generate(
+        maps.length,
+        (i) => Account(
+              maps[i]['id'],
+              maps[i]['name'],
+              maps[i]['initialBalance'],
+              maps[i]['balance'],
+              maps[i]['currency'],
+            ));
+  }
 }

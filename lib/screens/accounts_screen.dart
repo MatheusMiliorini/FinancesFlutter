@@ -1,24 +1,48 @@
+import 'package:finances/database/account_db.dart';
+import 'package:finances/models/account.dart';
 import 'package:finances/screens/account_form_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:finances/widgets/account_list_item.dart';
 
-class AccountsScreen extends StatelessWidget {
+class AccountsScreen extends StatefulWidget {
   const AccountsScreen({super.key});
 
   @override
+  State<StatefulWidget> createState() => AccountsScreenState();
+}
+
+class AccountsScreenState extends State<AccountsScreen> {
+  List<Account> accountList = [];
+
+  Future<void> fetchAccountList() async {
+    final list = await AccountDB().list();
+
+    setState(() {
+      accountList = list;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    fetchAccountList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Accounts'),
       ),
-      body: const Center(
-        child: Text('Accounts Screen'),
+      body: ListView.builder(
+        itemCount: accountList.length,
+        itemBuilder: (context, index) {
+          return AccountListItem(account: accountList[index]);
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => const AccountFormScreen()));
+          fetchAccountList();
         },
         tooltip: 'Add Account',
         child: const Icon(Icons.add),
