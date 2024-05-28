@@ -4,7 +4,9 @@ import 'package:finances/widgets/currency_input.dart';
 import 'package:flutter/material.dart';
 
 class AccountFormScreen extends StatelessWidget {
-  const AccountFormScreen({super.key});
+  final Account? editAccount;
+
+  const AccountFormScreen({super.key, this.editAccount});
 
   @override
   Widget build(BuildContext context) {
@@ -12,15 +14,17 @@ class AccountFormScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Account Form'),
         ),
-        body: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: AccountForm(),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: AccountForm(editAccount: editAccount),
         ));
   }
 }
 
 class AccountForm extends StatefulWidget {
-  const AccountForm({super.key});
+  final Account? editAccount;
+
+  const AccountForm({super.key, this.editAccount});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -34,6 +38,17 @@ class _AccountFormState extends State<AccountForm> {
   final _accountNameController = TextEditingController();
   int _balance = 0;
   final _currencyController = TextEditingController(text: 'EUR');
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.editAccount != null) {
+      _accountNameController.text = widget.editAccount!.name;
+      _balance = widget.editAccount!.balance;
+      _currencyController.text = widget.editAccount!.currency;
+    }
+  }
 
   @override
   void dispose() {
@@ -66,6 +81,9 @@ class _AccountFormState extends State<AccountForm> {
               _balance = int.parse(value.replaceAll('.', ''));
             }),
             label: 'Current Balance',
+            enabled: widget.editAccount == null,
+            initialValue:
+                (widget.editAccount!.balance / 100).toStringAsFixed(2),
           ),
           TextFormField(
             controller: _currencyController,

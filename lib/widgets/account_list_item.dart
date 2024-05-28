@@ -1,18 +1,25 @@
 import 'package:finances/database/account_db.dart';
 import 'package:finances/models/account.dart';
+import 'package:finances/screens/account_form_screen.dart';
 import 'package:flutter/material.dart';
 
 class AccountListItem extends StatelessWidget {
   final Account account;
-  final Function onDelete;
+  final Function onDeleteOrUpdate;
 
   const AccountListItem({
     super.key,
     required this.account,
-    required this.onDelete,
+    required this.onDeleteOrUpdate,
   });
 
-  void editAccount() {}
+  Future<void> editAccount(BuildContext context) async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AccountFormScreen(editAccount: account)));
+    onDeleteOrUpdate();
+  }
 
   void deleteAccount(BuildContext context) {
     showDialog(
@@ -31,7 +38,7 @@ class AccountListItem extends StatelessWidget {
             onPressed: () {
               AccountDB().delete(account);
               Navigator.pop(context);
-              onDelete();
+              onDeleteOrUpdate();
             },
             child: const Text('Confirm'),
           )
@@ -51,7 +58,7 @@ class AccountListItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: editAccount,
+                onPressed: () => editAccount(context),
                 icon: const Icon(Icons.edit),
               ),
               IconButton(

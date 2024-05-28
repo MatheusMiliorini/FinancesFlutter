@@ -4,9 +4,16 @@ import 'package:flutter/services.dart';
 class CurrencyInputField extends StatefulWidget {
   final ValueChanged<String> onChange;
   final String label;
+  final bool enabled;
+  final String? initialValue;
 
-  const CurrencyInputField(
-      {super.key, required this.onChange, required this.label});
+  const CurrencyInputField({
+    super.key,
+    required this.onChange,
+    required this.label,
+    this.enabled = true,
+    this.initialValue,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -19,6 +26,10 @@ class _CurrencyInputFieldState extends State<CurrencyInputField> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.initialValue != null) {
+      _controller.text = widget.initialValue!;
+    }
     _controller.addListener(_updateValue);
   }
 
@@ -65,6 +76,7 @@ class _CurrencyInputFieldState extends State<CurrencyInputField> {
         }
         return null;
       },
+      enabled: widget.enabled,
     );
   }
 }

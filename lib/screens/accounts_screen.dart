@@ -40,7 +40,7 @@ class AccountsScreenState extends State<AccountsScreen> {
               itemBuilder: (context, index) {
                 return AccountListItem(
                   account: accountList[index],
-                  onDelete: fetchAccountList,
+                  onDeleteOrUpdate: fetchAccountList,
                 );
               },
             )
