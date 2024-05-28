@@ -1,9 +1,9 @@
 class Account {
-  final int? id;
-  final String name;
-  final int initialBalance;
-  final int balance;
-  final String currency;
+  int? id;
+  String name;
+  int initialBalance;
+  int balance;
+  String currency;
 
   Account(this.id, this.name, this.initialBalance, this.balance, this.currency);
 

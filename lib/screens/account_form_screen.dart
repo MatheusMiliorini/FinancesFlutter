@@ -86,7 +86,11 @@ class _AccountFormState extends State<AccountForm> {
                 if (_formKey.currentState!.validate()) {
                   Account account = Account(null, _accountNameController.text,
                       _balance, _balance, _currencyController.text);
-                  await AccountDB().create(account);
+                  account.id = await AccountDB().create(account);
+                  if (account.id != null) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context);
+                  }
                 }
               },
               child: const Text('Submit'),
