@@ -85,7 +85,7 @@ class _AccountFormState extends State<AccountForm> {
             label: 'Current Balance',
             enabled: widget.editAccount == null,
             initialValue:
-                (widget.editAccount!.balance / 100).toStringAsFixed(2),
+                ((widget.editAccount?.balance ?? 0) / 100).toStringAsFixed(2),
           ),
           TextFormField(
             controller: _currencyController,
