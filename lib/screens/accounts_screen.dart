@@ -23,19 +23,27 @@ class AccountsScreenState extends State<AccountsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     fetchAccountList();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Accounts'),
       ),
-      body: ListView.builder(
-        itemCount: accountList.length,
-        itemBuilder: (context, index) {
-          return AccountListItem(account: accountList[index]);
-        },
-      ),
+      body: accountList.isNotEmpty
+          ? ListView.builder(
+              itemCount: accountList.length,
+              itemBuilder: (context, index) {
+                return AccountListItem(account: accountList[index]);
+              },
+            )
+          : const Center(
+              child: Text('No accounts created'),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.push(
