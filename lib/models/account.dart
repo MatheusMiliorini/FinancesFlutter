@@ -4,6 +4,7 @@ class Account {
   int initialBalance;
   int balance;
   String currency;
+  bool deleted = false;
 
   Account(this.id, this.name, this.initialBalance, this.balance, this.currency);
 
@@ -14,6 +15,7 @@ class Account {
       'initialBalance': initialBalance,
       'balance': balance,
       'currency': currency,
+      'deleted': deleted,
     };
   }
 }

@@ -21,12 +21,12 @@ abstract class DatabaseHelper {
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS accounts (
-        "id" INTEGER NOT NULL,
+        "id" INTEGER NOT NULL PRIMARY KEY,
         "name" TEXT NOT NULL,
         "initialBalance" INTEGER NOT NULL,
         "balance" INTEGER NOT NULL,
         "currency" TEXT NOT NULL,
-        PRIMARY KEY("id" AUTOINCREMENT)
+        "deleted" BOOL NOT NULL DEFAULT FALSE
       );
     ''');
   }

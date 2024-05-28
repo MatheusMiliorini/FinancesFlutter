@@ -11,7 +11,10 @@ class AccountDB extends DatabaseHelper {
 
   Future<List<Account>> list() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(tableName);
+    final List<Map<String, dynamic>> maps = await db.query(
+      tableName,
+      where: 'deleted = false',
+    );
     return List.generate(
         maps.length,
         (i) => Account(
@@ -21,5 +24,15 @@ class AccountDB extends DatabaseHelper {
               maps[i]['balance'],
               maps[i]['currency'],
             ));
+  }
+
+  Future<int> delete(Account account) async {
+    final db = await database;
+    return await db.update(
+      tableName,
+      {'deleted': true},
+      where: 'id = ?',
+      whereArgs: [account.id],
+    );
   }
 }
