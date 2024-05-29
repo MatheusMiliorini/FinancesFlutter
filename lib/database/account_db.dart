@@ -51,7 +51,7 @@ class AccountDB extends DatabaseHelper {
     final Map<String, int> currencySum = {};
 
     final List<Map<String, dynamic>> res = await db.rawQuery(
-        'SELECT currency, SUM(balance) AS sumBalance FROM $tableName GROUP BY currency;');
+        'SELECT currency, SUM(balance) AS sumBalance FROM $tableName WHERE deleted = false GROUP BY currency;');
 
     for (var row in res) {
       currencySum[row['currency']] = row['sumBalance'];
