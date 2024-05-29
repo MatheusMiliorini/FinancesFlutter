@@ -17,7 +17,11 @@ class PersonalFinanceApp extends StatelessWidget {
     return MaterialApp(
       title: title,
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primarySwatch: Colors.green,
+        appBarTheme: const AppBarTheme(
+          color: Colors.green,
+          foregroundColor: Colors.white,
+        ),
       ),
       home: const HomeScreen(),
     );
