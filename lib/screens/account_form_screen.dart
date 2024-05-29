@@ -71,6 +71,7 @@ class _AccountFormState extends State<AccountForm> {
             decoration: const InputDecoration(
               labelText: 'Account Name',
             ),
+            textCapitalization: TextCapitalization.words,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter the account name';
