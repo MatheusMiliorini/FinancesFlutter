@@ -5,35 +5,16 @@ import 'package:finances/models/account.dart';
 import 'package:finances/widgets/currency_input.dart';
 import 'package:flutter/material.dart';
 
-class AccountFormScreen extends StatelessWidget {
+class AccountFormScreen extends StatefulWidget {
   final Account? editAccount;
 
   const AccountFormScreen({super.key, this.editAccount});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(editAccount == null ? 'New Account' : 'Edit Account'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: _AccountForm(editAccount: editAccount),
-        ));
-  }
+  State<StatefulWidget> createState() => _AccountFormScreenState();
 }
 
-class _AccountForm extends StatefulWidget {
-  final Account? editAccount;
-
-  const _AccountForm({this.editAccount});
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _AccountFormState createState() => _AccountFormState();
-}
-
-class _AccountFormState extends State<_AccountForm> {
+class _AccountFormScreenState extends State<AccountFormScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // Form Controllers
@@ -62,71 +43,83 @@ class _AccountFormState extends State<_AccountForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          TextFormField(
-            autofocus: true,
-            controller: _accountNameController,
-            decoration: const InputDecoration(
-              labelText: 'Account Name',
-            ),
-            textCapitalization: TextCapitalization.words,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the account name';
-              }
-              return null;
-            },
-          ),
-          CurrencyInputField(
-            onChange: (value) => setState(() {
-              _balance = int.parse(value.replaceAll('.', ''));
-            }),
-            label: 'Current Balance',
-            enabled: widget.editAccount == null,
-            initialValue:
-                ((widget.editAccount?.balance ?? 0) / 100).toStringAsFixed(2),
-          ),
-          TextFormField(
-            controller: _currencyController,
-            decoration: const InputDecoration(
-              labelText: 'Currency',
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the currency';
-              }
-              return null;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  if (widget.editAccount == null) {
-                    Account account = Account(null, _accountNameController.text,
-                        _balance, _balance, _currencyController.text);
-                    account.id = await AccountDB().create(account);
-                    if (account.id != null) {
-                      Navigator.pop(context);
+    return Scaffold(
+        appBar: AppBar(
+          title:
+              Text(widget.editAccount == null ? 'New Account' : 'Edit Account'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  autofocus: true,
+                  controller: _accountNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Account Name',
+                  ),
+                  textCapitalization: TextCapitalization.words,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the account name';
                     }
-                    return;
-                  }
-                  final editAccount = widget.editAccount;
-                  editAccount!.name = _accountNameController.text;
-                  editAccount.currency = _currencyController.text;
-                  await AccountDB().update(editAccount);
-                  Navigator.pop(context);
-                }
-              },
-              child: const Text('Submit'),
+                    return null;
+                  },
+                ),
+                CurrencyInputField(
+                  onChange: (value) => setState(() {
+                    _balance = int.parse(value.replaceAll('.', ''));
+                  }),
+                  label: 'Current Balance',
+                  enabled: widget.editAccount == null,
+                  initialValue: ((widget.editAccount?.balance ?? 0) / 100)
+                      .toStringAsFixed(2),
+                ),
+                TextFormField(
+                  controller: _currencyController,
+                  decoration: const InputDecoration(
+                    labelText: 'Currency',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the currency';
+                    }
+                    return null;
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        if (widget.editAccount == null) {
+                          Account account = Account(
+                              null,
+                              _accountNameController.text,
+                              _balance,
+                              _balance,
+                              _currencyController.text);
+                          account.id = await AccountDB().create(account);
+                          if (account.id != null) {
+                            Navigator.pop(context);
+                          }
+                          return;
+                        }
+                        final editAccount = widget.editAccount;
+                        editAccount!.name = _accountNameController.text;
+                        editAccount.currency = _currencyController.text;
+                        await AccountDB().update(editAccount);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: const Text('Submit'),
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
-    );
+          ),
+        ));
   }
 }
