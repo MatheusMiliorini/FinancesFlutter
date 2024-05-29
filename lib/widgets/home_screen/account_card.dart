@@ -1,5 +1,6 @@
 import 'package:finances/models/account.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AccountCard extends StatelessWidget {
   final Account account;
@@ -8,6 +9,10 @@ class AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final numberFormat = NumberFormat.currency(
+      name: account.currency,
+      symbol: '',
+    );
     return Card(
         shape: const BeveledRectangleBorder(),
         elevation: 2.0,
@@ -19,7 +24,7 @@ class AccountCard extends StatelessWidget {
             children: [
               Text(account.name),
               Text(
-                  '${(account.balance / 100).toStringAsFixed(2)} ${account.currency}')
+                  '${account.currency} ${numberFormat.format(account.balance / 100)}'),
             ],
           ),
         ));

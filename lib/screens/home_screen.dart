@@ -5,6 +5,7 @@ import 'package:finances/widgets/home_screen/account_card.dart';
 import 'package:finances/widgets/home_screen/add_new_account_cart.dart';
 import 'package:finances/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -96,9 +97,26 @@ class HomeScreenState extends State<HomeScreen> {
                     childAspectRatio: 1 / .05,
                   ),
                   itemBuilder: (context, index) {
-                    String currency = _currencyBalance.keys.elementAt(index);
-                    return Text(
-                        '$currency: ${(_currencyBalance[currency]! / 100).toStringAsFixed(2)}');
+                    final String currency =
+                        _currencyBalance.keys.elementAt(index);
+
+                    final NumberFormat numberFormat = NumberFormat.currency(
+                      name: currency,
+                      decimalDigits: 2,
+                      symbol: '',
+                    );
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(currency),
+                          Text(numberFormat
+                              .format(_currencyBalance[currency]! / 100)),
+                        ],
+                      ),
+                    );
                   },
                 ),
               ),
