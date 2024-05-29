@@ -69,7 +69,7 @@ class HomeScreenState extends State<HomeScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 1 / .25,
+                    childAspectRatio: 3,
                   ),
                   itemBuilder: (context, index) {
                     if (index < _accounts.length) {

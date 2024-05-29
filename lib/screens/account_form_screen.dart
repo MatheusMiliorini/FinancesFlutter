@@ -67,6 +67,7 @@ class _AccountFormState extends State<_AccountForm> {
       child: Column(
         children: [
           TextFormField(
+            autofocus: true,
             controller: _accountNameController,
             decoration: const InputDecoration(
               labelText: 'Account Name',
