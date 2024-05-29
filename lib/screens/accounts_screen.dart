@@ -8,10 +8,10 @@ class AccountsScreen extends StatefulWidget {
   const AccountsScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => AccountsScreenState();
+  State<StatefulWidget> createState() => _AccountsScreenState();
 }
 
-class AccountsScreenState extends State<AccountsScreen> {
+class _AccountsScreenState extends State<AccountsScreen> {
   List<Account> accountList = [];
 
   Future<void> fetchAccountList() async {

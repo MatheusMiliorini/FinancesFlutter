@@ -11,10 +11,10 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => HomeScreenState();
+  State<StatefulWidget> createState() => _HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   List<Account> _accounts = [];
   Map<String, int> _currencyBalance = {};
 
