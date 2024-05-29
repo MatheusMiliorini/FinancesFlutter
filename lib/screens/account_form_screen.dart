@@ -18,22 +18,22 @@ class AccountFormScreen extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: AccountForm(editAccount: editAccount),
+          child: _AccountForm(editAccount: editAccount),
         ));
   }
 }
 
-class AccountForm extends StatefulWidget {
+class _AccountForm extends StatefulWidget {
   final Account? editAccount;
 
-  const AccountForm({super.key, this.editAccount});
+  const _AccountForm({this.editAccount});
 
   @override
   // ignore: library_private_types_in_public_api
   _AccountFormState createState() => _AccountFormState();
 }
 
-class _AccountFormState extends State<AccountForm> {
+class _AccountFormState extends State<_AccountForm> {
   final _formKey = GlobalKey<FormState>();
 
   // Form Controllers
