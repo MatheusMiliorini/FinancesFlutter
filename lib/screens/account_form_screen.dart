@@ -14,7 +14,7 @@ class AccountFormScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Account Form'),
+          title: Text(editAccount == null ? 'New Account' : 'Edit Account'),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
