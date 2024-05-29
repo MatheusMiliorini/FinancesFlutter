@@ -45,4 +45,18 @@ class AccountDB extends DatabaseHelper {
       whereArgs: [account.id],
     );
   }
+
+  Future<Map<String, int>> balanceByCurrency() async {
+    final db = await database;
+    final Map<String, int> currencySum = {};
+
+    final List<Map<String, dynamic>> res = await db.rawQuery(
+        'SELECT currency, SUM(balance) AS sumBalance FROM $tableName GROUP BY currency;');
+
+    for (var row in res) {
+      currencySum[row['currency']] = row['sumBalance'];
+    }
+
+    return currencySum;
+  }
 }
